@@ -22,12 +22,14 @@ import json
 import os.path
 import pathlib2 as pathlib
 
+from pixels import pixels
 import google.oauth2.credentials
 
 from google.assistant.library import Assistant
 from google.assistant.library.event import EventType
 from google.assistant.library.file_helpers import existing_file
 from google.assistant.library.device_helpers import register_device
+
 
 try:
     FileNotFoundError
@@ -64,6 +66,13 @@ def process_event(event):
     if event.type == EventType.ON_DEVICE_ACTION:
         for command, params in event.actions:
             print('Do command', command, 'with params', str(params))
+            if command == "action.devices.commands.OnOff":
+                if params['on']:
+                    print('Turning The Led on.')
+                    pixels.wakeup()
+                else:
+                    print('Turning the Led off.')
+                    pixels.off()
 
 
 def main():
